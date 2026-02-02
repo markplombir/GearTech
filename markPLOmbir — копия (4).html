@@ -1,0 +1,2284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearTech - Комплектующие для ПК</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0a1a3d;
+            --secondary-blue: #1a2b5f;
+            --accent-blue: #2d4fa7;
+            --light-blue: #4a7cff;
+            --green-accent: #00ff88;
+            --green-glow: #00ffaa;
+            --white: #ffffff;
+            --off-white: #f5f7ff;
+            --gray: #d9e2ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Центрирование всех контейнеров */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(74, 124, 255, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .logo i {
+            color: var(--light-blue);
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 5px;
+            position: relative;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--light-blue);
+            background-color: rgba(74, 124, 255, 0.1);
+        }
+
+        .nav-links a.active {
+            color: var(--light-blue);
+            background-color: rgba(74, 124, 255, 0.2);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--light-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 70%;
+        }
+
+        /* Бургер-меню - 3 полоски в правом верхнем углу */
+        .burger-menu {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            z-index: 2000;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(10, 26, 61, 0.8);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(74, 124, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu:hover {
+            background: rgba(26, 43, 95, 0.9);
+            border-color: var(--light-blue);
+            box-shadow: 0 0 20px rgba(74, 124, 255, 0.3);
+        }
+
+        .burger-line {
+            width: 30px;
+            height: 3px;
+            background: var(--light-blue);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .burger-menu.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .burger-menu.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Боковая панель (сайдбар) */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 350px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            z-index: 2000;
+            transition: right 0.4s ease;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+            border-left: 2px solid rgba(74, 124, 255, 0.3);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            border-bottom: 1px solid rgba(74, 124, 255, 0.3);
+            text-align: center;
+            background: rgba(26, 43, 95, 0.5);
+        }
+
+        .sidebar-header h3 {
+            color: var(--light-blue);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(74, 124, 255, 0.5);
+        }
+
+        .sidebar-header p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 25px;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 15px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background: rgba(74, 124, 255, 0.1);
+            border: 1px solid rgba(74, 124, 255, 0.2);
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(74, 124, 255, 0.3);
+            color: var(--light-blue);
+            transform: translateX(5px);
+            border-color: var(--light-blue);
+        }
+
+        .sidebar-nav a i {
+            margin-right: 15px;
+            font-size: 1.4rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 25px;
+            border-top: 1px solid rgba(74, 124, 255, 0.3);
+            text-align: center;
+            background: rgba(10, 26, 61, 0.7);
+        }
+
+        .sidebar-footer p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        /* Страница авторизации/регистрации - УЛУЧШЕННАЯ */
+        .auth-section {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding-top: 120px;
+            padding-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-section.active {
+            display: flex;
+        }
+
+        .auth-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(10, 26, 61, 0.9);
+            padding: 50px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(74, 124, 255, 0.4);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(74, 124, 255, 0.3),
+                inset 0 0 30px rgba(74, 124, 255, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(74, 124, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shine 8s infinite linear;
+            z-index: -1;
+        }
+
+        .auth-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .auth-header h2 {
+            color: var(--light-blue);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(74, 124, 255, 0.7);
+        }
+
+        .auth-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .auth-highlight {
+            color: var(--green-accent);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(74, 124, 255, 0.3);
+            position: relative;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 18px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-tab.active {
+            color: var(--light-blue);
+        }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--light-blue);
+            box-shadow: 0 0 15px rgba(74, 124, 255, 0.7);
+        }
+
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--gray);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(26, 43, 95, 0.7);
+            border: 1px solid rgba(74, 124, 255, 0.3);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--light-blue);
+            box-shadow: 
+                0 0 0 3px rgba(74, 124, 255, 0.2),
+                inset 0 0 10px rgba(74, 124, 255, 0.1);
+            background: rgba(26, 43, 95, 0.9);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--light-blue), var(--accent-blue));
+            border: none;
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .auth-btn:hover {
+            background: linear-gradient(135deg, var(--accent-blue), var(--light-blue));
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 30px rgba(74, 124, 255, 0.5),
+                0 0 40px rgba(74, 124, 255, 0.3);
+        }
+
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+
+        .auth-btn i {
+            margin-right: 10px;
+        }
+
+        .auth-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .auth-links a {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .auth-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--light-blue);
+            transition: width 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            color: var(--white);
+            text-shadow: 0 0 10px rgba(74, 124, 255, 0.7);
+        }
+
+        .auth-links a:hover::after {
+            width: 100%;
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            color: var(--green-accent);
+            font-weight: 600;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
+        }
+
+        /* ОРИГИНАЛЬНАЯ ФИШКА: Анимированные чипы вокруг формы */
+        .auth-chips {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .auth-chip {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(74, 124, 255, 0.2);
+            border: 1px solid rgba(74, 124, 255, 0.4);
+            border-radius: 5px;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .auth-chip:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .auth-chip:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .auth-chip:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+        .auth-chip:nth-child(4) { bottom: 15%; right: 20%; animation-delay: 3s; }
+        .auth-chip:nth-child(5) { top: 40%; left: 25%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding-top: 120px;
+            padding-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .page-section.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Все секции имеют синий фон */
+        .hero, .about, .catalog, .contacts {
+            background: radial-gradient(circle at 30% 30%, rgba(42, 92, 224, 0.2) 0%, rgba(10, 26, 61, 0.9) 70%);
+            position: relative;
+        }
+
+        .hero::before,
+        .about::before,
+        .catalog::before,
+        .contacts::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0,50 Q25,40 50,50 T100,50" stroke="rgba(74, 124, 255, 0.1)" stroke-width="2" fill="none"/><path d="M0,30 Q25,20 50,30 T100,30" stroke="rgba(74, 124, 255, 0.1)" stroke-width="2" fill="none"/><path d="M0,70 Q25,60 50,70 T100,70" stroke="rgba(74, 124, 255, 0.1)" stroke-width="2" fill="none"/></svg>');
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* Общий стиль для всех контент-блоков */
+        .hero-content,
+        .about-content,
+        .catalog-content,
+        .contacts-content {
+            max-width: 1100px;
+            position: relative;
+            z-index: 2;
+            background: rgba(10, 26, 61, 0.85);
+            padding: 50px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(74, 124, 255, 0.3);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(74, 124, 255, 0.2);
+            margin-bottom: 40px;
+            text-align: center;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .hero-content::before,
+        .about-content::before,
+        .catalog-content::before,
+        .contacts-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(74, 124, 255, 0.05) 50%,
+                transparent 70%
+            );
+            animation: shine 8s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Заголовки */
+        .catalog h2,
+        .contacts h2,
+        .about h2 {
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            margin-bottom: 40px;
+            color: var(--light-blue);
+            text-align: center;
+            text-shadow: 0 0 20px rgba(74, 124, 255, 0.5);
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .catalog h2::after,
+        .contacts h2::after,
+        .about h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--light-blue), transparent);
+            border-radius: 2px;
+        }
+
+        /* ОБНОВЛЁННЫЙ КАТАЛОГ - товар с оперативной памятью */
+        .catalog-welcome,
+        .welcome-text {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 50px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .catalog-welcome .highlight,
+        .welcome-text .highlight,
+        .highlight {
+            color: var(--light-blue);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(74, 124, 255, 0.5);
+        }
+
+        .product-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .product-title {
+            font-size: 2.2rem;
+            color: var(--light-blue);
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(74, 124, 255, 0.6);
+        }
+
+        .product-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 40px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .product-image {
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(74, 124, 255, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            background: rgba(26, 43, 95, 0.5);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image:hover {
+            transform: translateY(-10px);
+            border-color: var(--light-blue);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 50px rgba(74, 124, 255, 0.3);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(26, 43, 95, 0.7), rgba(45, 79, 167, 0.5));
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-blue);
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .image-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--light-blue);
+        }
+
+        .product-specs {
+            background: linear-gradient(135deg, rgba(26, 43, 95, 0.6), rgba(45, 79, 167, 0.4));
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(74, 124, 255, 0.3);
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .product-specs h3 {
+            color: var(--light-blue);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 124, 255, 0.3);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(74, 124, 255, 0.2);
+        }
+
+        .spec-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .spec-value {
+            color: var(--green-accent);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .product-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(26, 43, 95, 0.3);
+            border-radius: 15px;
+            border-left: 4px solid var(--light-blue);
+        }
+
+        .product-cta {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 170, 255, 0.15));
+            border-radius: 20px;
+            border: 2px solid rgba(0, 255, 136, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-cta h4 {
+            color: var(--green-accent);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+        }
+
+        .product-cta p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .product-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--green-accent), var(--green-glow));
+            color: var(--primary-blue) !important;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 35px rgba(0, 255, 136, 0.5),
+                0 0 50px rgba(0, 255, 136, 0.4);
+            color: var(--primary-blue) !important;
+        }
+
+        .product-link i {
+            margin-right: 10px;
+        }
+
+        .catalog-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin: 50px 0;
+            width: 100%;
+            justify-items: center;
+        }
+
+        /* Карточки */
+        .contact-card,
+        .catalog-card {
+            background: linear-gradient(135deg, rgba(26, 43, 95, 0.6), rgba(45, 79, 167, 0.4));
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(74, 124, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contact-card::before,
+        .catalog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+            z-index: -1;
+        }
+
+        .contact-card:hover::before,
+        .catalog-card:hover::before {
+            left: 100%;
+        }
+
+        .contact-card:hover,
+        .catalog-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--light-blue);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(74, 124, 255, 0.3);
+        }
+
+        .contact-card i,
+        .catalog-card i {
+            font-size: 3rem;
+            color: var(--light-blue);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .contact-card h3,
+        .catalog-card h3 {
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 15px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .contact-info,
+        .catalog-info {
+            font-size: 1.3rem;
+            color: var(--green-accent);
+            text-decoration: none;
+            display: block;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            word-break: break-word;
+            text-align: center;
+            width: 100%;
+        }
+
+        .contact-info:hover,
+        .catalog-info:hover {
+            color: var(--white);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.7);
+            transform: scale(1.05);
+        }
+
+        .contact-description,
+        .catalog-description {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-top: 15px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 20px;
+            color: var(--white);
+            text-shadow: 0 0 10px rgba(74, 124, 255, 0.5);
+            line-height: 1.2;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .hero h1 span {
+            color: var(--light-blue);
+            position: relative;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--light-blue), transparent);
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            margin-bottom: 20px;
+            color: var(--gray);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .signature {
+            font-style: italic;
+            margin-top: 30px;
+            color: var(--light-blue);
+            font-weight: 600;
+            text-align: center;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            width: 100%;
+        }
+
+        /* About Section */
+        .about-content {
+            max-width: 900px;
+        }
+
+        .about h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 40px;
+        }
+
+        .about-section {
+            margin-bottom: 40px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .about-section h3 {
+            color: var(--light-blue);
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(74, 124, 255, 0.3);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .about-section p {
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: clamp(1rem, 2vw, 1.1rem);
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+            width: 100%;
+            justify-items: center;
+        }
+
+        .principle-card {
+            background: rgba(26, 43, 95, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(74, 124, 255, 0.2);
+            transition: all 0.3s ease;
+            max-width: 100%;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--light-blue);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .principle-card i {
+            font-size: 2.5rem;
+            color: var(--light-blue);
+            margin-bottom: 20px;
+        }
+
+        .principle-card h4 {
+            color: var(--white);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .principle-card p {
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
+            width: 100%;
+        }
+
+        /* Avito Link */
+        .avito-link {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 170, 255, 0.15));
+            border-radius: 15px;
+            border: 2px solid rgba(0, 255, 136, 0.4);
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .avito-link a {
+            display: inline-block;
+            color: var(--green-accent) !important;
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            font-weight: 700;
+            text-decoration: none;
+            padding: 15px 30px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-align: center;
+            white-space: nowrap;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.7);
+        }
+
+        .avito-link a:hover {
+            background: var(--green-accent);
+            color: white !important;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+            border-color: var(--green-accent);
+        }
+
+        .avito-link i {
+            margin-right: 10px;
+            color: var(--green-accent);
+        }
+
+        .avito-link a:hover i {
+            color: white;
+        }
+
+        /* Animated Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .element {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            will-change: transform;
+            transition: transform 4s ease-in-out, left 4s ease-in-out, top 4s ease-in-out, opacity 4s ease-in-out;
+            filter: drop-shadow(0 0 8px rgba(74, 124, 255, 0.6));
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to top, var(--primary-blue), var(--secondary-blue));
+            padding: 40px 0;
+            text-align: center;
+            border-top: 2px solid rgba(74, 124, 255, 0.3);
+            margin-top: auto;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(74, 124, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 22px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(74, 124, 255, 0.3);
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--light-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(74, 124, 255, 0.3);
+        }
+
+        .copyright {
+            margin-top: 30px;
+            color: var(--gray);
+            font-size: clamp(0.8rem, 2vw, 14px);
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-content, .about-content, .catalog-content, .contacts-content {
+                padding: 30px;
+                margin: 0 10px 30px 10px;
+            }
+            
+            .nav-links li {
+                margin-left: 15px;
+            }
+            
+            .contact-methods,
+            .catalog-methods {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .principles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sidebar {
+                width: 300px;
+            }
+            
+            .product-gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .product-image {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 26, 61, 0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                border-bottom: 2px solid rgba(74, 124, 255, 0.3);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .nav-links a {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+            
+            .hero-content, .about-content, .catalog-content, .contacts-content {
+                padding: 25px 20px;
+                margin: 0 10px 30px 10px;
+            }
+            
+            .page-section {
+                padding-top: 100px;
+            }
+            
+            .principles-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .principle-card {
+                max-width: 100%;
+            }
+            
+            .avito-link {
+                padding: 20px;
+                margin: 30px 10px 0 10px;
+            }
+            
+            .avito-link a {
+                padding: 12px 20px;
+                font-size: 1.1rem;
+                white-space: normal;
+                word-break: break-word;
+            }
+            
+            .contact-card,
+            .catalog-card {
+                padding: 25px;
+            }
+            
+            .contact-info,
+            .catalog-info {
+                font-size: 1.1rem;
+            }
+            
+            .burger-menu {
+                top: 20px;
+                right: 20px;
+                padding: 10px 12px;
+            }
+            
+            .burger-line {
+                width: 25px;
+                height: 2.5px;
+            }
+            
+            .sidebar {
+                width: 280px;
+            }
+            
+            .auth-container {
+                padding: 35px 25px;
+                margin: 0 20px;
+            }
+            
+            .product-title {
+                font-size: 1.8rem;
+            }
+            
+            .product-specs {
+                padding: 25px;
+            }
+            
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 20px;
+            }
+            
+            .logo i {
+                font-size: 22px;
+                margin-right: 8px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-content, .about-content, .catalog-content, .contacts-content {
+                padding: 20px 15px;
+            }
+            
+            .catalog h2,
+            .contacts h2,
+            .about h2 {
+                font-size: 1.8rem;
+            }
+            
+            .about-section h3 {
+                font-size: 1.4rem;
+            }
+            
+            .social-links a {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .page-section {
+                padding-top: 90px;
+            }
+            
+            header {
+                padding: 15px 0;
+            }
+            
+            .nav-links {
+                top: 70px;
+            }
+            
+            .catalog-welcome,
+            .welcome-text {
+                font-size: 1.1rem;
+            }
+            
+            .contact-card h3,
+            .catalog-card h3 {
+                font-size: 1.5rem;
+            }
+            
+            .principles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .burger-menu {
+                top: 18px;
+                right: 15px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .auth-container {
+                padding: 30px 20px;
+            }
+            
+            .auth-tab {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+            
+            .product-title {
+                font-size: 1.6rem;
+            }
+            
+            .product-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .hero p, .about-section p {
+                font-size: 0.95rem;
+            }
+            
+            .avito-link a {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            
+            .logo span {
+                font-size: 18px;
+            }
+            
+            .contact-info,
+            .catalog-info {
+                font-size: 1rem;
+            }
+            
+            .contact-methods,
+            .catalog-methods {
+                gap: 20px;
+            }
+            
+            .burger-menu {
+                padding: 8px 10px;
+            }
+            
+            .burger-line {
+                width: 22px;
+                height: 2px;
+            }
+            
+            .product-cta {
+                padding: 20px 15px;
+            }
+            
+            .product-link {
+                padding: 15px 25px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Бургер-меню (3 полоски) -->
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+    </div>
+
+    <!-- Боковая панель -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>GearTech</h3>
+            <p>Комплектующие для ПК</p>
+        </div>
+        <div class="sidebar-nav">
+            <ul>
+                <li><a href="#" id="sidebarAccount"><i class="fas fa-user-circle"></i> Личный кабинет</a></li>
+                <li><a href="#" class="sidebar-link" data-target="home"><i class="fas fa-home"></i> Главная</a></li>
+                <li><a href="#" class="sidebar-link" data-target="catalog"><i class="fas fa-shopping-cart"></i> Каталог</a></li>
+                <li><a href="#" class="sidebar-link" data-target="about"><i class="fas fa-info-circle"></i> О проекте</a></li>
+                <li><a href="#" class="sidebar-link" data-target="contacts"><i class="fas fa-envelope"></i> Контакты</a></li>
+                <li><a href="https://www.avito.ru/brands/8fff3fb51411fe8548318140d73cfb1b" target="_blank"><i class="fas fa-store"></i> Магазин на Авито</a></li>
+                <li><a href="https://t.me/markplombirr" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <p>Добро пожаловать в мир высоких технологий!</p>
+            <p>© 2026 GearTech</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo" id="logoHome">
+                    <i class="fas fa-microchip"></i>
+                    <span>GearTech</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active" data-target="home"><i class="fas fa-home"></i> Главная</a></li>
+                    <li><a href="#" class="nav-link" data-target="catalog"><i class="fas fa-shopping-cart"></i> Каталог</a></li>
+                    <li><a href="#" class="nav-link" data-target="about"><i class="fas fa-info-circle"></i> О проекте</a></li>
+                    <li><a href="#" class="nav-link" data-target="contacts"><i class="fas fa-envelope"></i> Контакты</a></li>
+                </ul>
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Animated Background Elements -->
+    <div class="bg-elements" id="bgElements"></div>
+
+    <!-- Страница авторизации/регистрации - УЛУЧШЕННАЯ -->
+    <section id="auth" class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <!-- Анимированные чипы (фишка) -->
+                <div class="auth-chips">
+                    <div class="auth-chip"></div>
+                    <div class="auth-chip"></div>
+                    <div class="auth-chip"></div>
+                    <div class="auth-chip"></div>
+                    <div class="auth-chip"></div>
+                </div>
+                
+                <div class="auth-header">
+                    <h2>Добро пожаловать!</h2>
+                    <p>Сайт <span class="auth-highlight">МАРК!</span></p>
+                    <p>Регистрируйся и пользуйся! <span class="auth-highlight">Мы снимаем ролик!</span></p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Вход</button>
+                    <button class="auth-tab" data-tab="register">Регистрация</button>
+                </div>
+                
+                <!-- Форма входа -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="fas fa-envelope"></i> Электронная почта</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="example@mail.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Пароль</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Введите пароль" required>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </button>
+                    
+                    <div class="auth-links">
+                        <a href="#" class="forgot-password">Забыли пароль?</a>
+                        <a href="#" class="switch-to-register">Нет аккаунта?</a>
+                    </div>
+                    
+                    <div class="success-message" id="loginSuccess">
+                        <i class="fas fa-check-circle"></i> Успешно! Добро пожаловать!
+                    </div>
+                </form>
+                
+                <!-- Форма регистрации -->
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="regName"><i class="fas fa-user"></i> Ваше имя</label>
+                        <input type="text" id="regName" class="form-control" placeholder="Илья Новик" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regEmail"><i class="fas fa-envelope"></i> Электронная почта</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="example@mail.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regPassword"><i class="fas fa-lock"></i> Пароль</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Придумайте пароль" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regConfirmPassword"><i class="fas fa-lock"></i> Подтверждение пароля</label>
+                        <input type="password" id="regConfirmPassword" class="form-control" placeholder="Повторите пароль" required>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">
+                        <i class="fas fa-user-plus"></i> Зарегистрироваться
+                    </button>
+                    
+                    <div class="auth-links">
+                        <a href="#" class="switch-to-login">Уже есть аккаунт?</a>
+                    </div>
+                    
+                    <div class="success-message" id="registerSuccess">
+                        <i class="fas fa-check-circle"></i> Успешно! Аккаунт создан!
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Sections -->
+    <!-- Главная страница -->
+    <section id="home" class="page-section hero active">
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="hero-content">
+                    <h1>Добро пожаловать! Меня зовут <span>Марк</span>.</h1>
+                    
+                    <p>Покупая продукт именно у меня, вы делаете не только покупку. Вы со-участвуете в амбициозном проекте и прямо инвестируете в создание в новой линейки комплектующих для ПК.</p>
+                    
+                    <p>Каждая ваша покупка — это решающий вклад в развитие производства, которое будет выпускать <span class="highlight">высококачественные, доступные, бюджетные</span> и самое главное <span class="highlight">качественные и технологичные</span> компоненты.</p>
+                    
+                    <p>Вы становитесь частью сообщества первых, кто помогает изменить рынок, получив в будущем <span class="highlight">приоритетный доступ</span> и <span class="highlight">особые условия</span> на продукцию собственного бренда.</p>
+                    
+                    <p>Спасибо, что верите в проект и поддерживаете его с самого начала! Следите!..</p>
+                    
+                    <div class="signature">— Марк, основатель GearTech</div>
+                </div>
+
+                <div class="avito-link">
+                    <a href="https://www.avito.ru/brands/8fff3fb51411fe8548318140d73cfb1b" target="_blank">
+                        <i class="fas fa-store"></i> Магазин на Авито
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Каталог" - ОБНОВЛЁННАЯ С ТОВАРОМ -->
+    <section id="catalog" class="page-section catalog">
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="catalog-content">
+                    <h2>Каталог</h2>
+                    
+                   <div class="catalog-welcome">
+                        Вы на верном пути, чтобы найти то, что ищете!<br>
+                        Эта страница создана для одного — чтобы ваш путь к покупке в моём магазине был 
+                        <span class="highlight">простым, быстрым, приятным</span> и не тратя свое время 
+                        на поиски качественного товара! Наличие товара есть на сайте.
+                        Если вы захотите приобрести Товар, перейдите в магазин на Авито.
+                    </div>
+                    
+                    <!-- Товар: Оперативная память DDR3 -->
+                    <div class="product-container">
+                        <h3 class="product-title">Оперативная память DDR3 16 GB (2x8) - 3.299 ₽</h3>
+                        <p class="product-subtitle">HyperX Fury — скорость и надёжность для вашей системы</p>
+                        
+                        <div class="product-gallery">
+                            <div class="product-image">
+                                <div class="image-placeholder">
+                                    <i class="fas fa-memory"></i>
+                                    <p>DDR3 HYPERX FURY</p>
+                                    <p>Оперативная память</p>
+                                </div>
+                            </div>
+                            <div class="product-image">
+                                <div class="image-placeholder">
+                                    <i class="fas fa-microchip"></i>
+                                    <p>HYPERX GAMMA KINGDOM</p>
+                                    <p>WARRANTY LIMITED</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-specs">
+                            <h3>Характеристики</h3>
+                            <div class="specs-grid">
+                                <div class="spec-item">
+                                    <span class="spec-label">Состояние:</span>
+                                    <span class="spec-value">Новое</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Производитель:</span>
+                                    <span class="spec-value">HyperX</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Код производителя:</span>
+                                    <span class="spec-value">HX318C10FWK2/16</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Тип:</span>
+                                    <span class="spec-value">DDR3</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Форм-фактор:</span>
+                                    <span class="spec-value">DIMM</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Объём модуля:</span>
+                                    <span class="spec-value">8 ГБ</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Тактовая частота:</span>
+                                    <span class="spec-value">1866 МГц (x2 = 3732 МГц)</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="spec-label">Количество модулей:</span>
+                                    <span class="spec-value">2</span>
+                                </div>
+                            </div>
+                            
+                            <div class="product-description">
+                                <p><strong>Описание:</strong> Высокопроизводительная оперативная память HyperX Fury DDR3 — идеальное решение для модернизации вашего ПК. Отличается высокой скоростью работы (1866 МГц), низкими таймингами и эффективным теплорассеиванием. Совместима с большинством материнских плат, поддерживающих DDR3. Отличный выбор для игр и профессиональных задач.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="product-cta">
+                            <h4>Хотите приобрести этот товар?</h4>
+                            <p>Перейдите в наш магазин на Авито для оформления заказа</p>
+                            <a href="https://www.avito.ru/brands/8fff3fb51411fe8548318140d73cfb1b" target="_blank" class="product-link">
+                                <i class="fas fa-shopping-cart"></i> Купить на Авито
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Старый блок каталога -->
+                    <div class="catalog-methods">
+                        <div class="catalog-card">
+                            <i class="fas fa-store"></i>
+                            <h3>Авито</h3>
+                            <a href="https://www.avito.ru/brands/8fff3fb51411fe8548318140d73cfb1b" target="_blank" class="catalog-info">
+                                Мой магазин на Авито
+                            </a>
+                            <p class="catalog-description">
+                                Площадка для покупки комплектующих
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "О проекте" -->
+    <section id="about" class="page-section about">
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="about-content">
+                    <h2>О проекте</h2>
+                    
+                    <div class="about-section">
+                        <h3>Наша миссия</h3>
+                        <p>Добро пожаловать! Я Марк.</p>
+                        <p>Покупая продукт именно у меня, вы делаете не только покупку. Вы со-участвуете в амбициозном проекте и прямо инвестируете в создание в новой линейки комплектующих для ПК.</p>
+                        <p>Каждая ваша покупка — это решающий вклад в развитие производства, которое будет выпускать высококачественные, доступные, бюджетные и самое главное качественные и технологичные компоненты.</p>
+                        <p>Вы становитесь частью сообщества первых, кто помогает изменить рынок, получив в будущем приоритетный доступ и особые условия на продукцию собственного бренда.</p>
+                        <p>Спасибо, что верите в проект и поддерживаете его с самого начала!</p>
+                        <p>Вместе мы создадим нечто большее.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h3>Запускаем собственное производство</h3>
+                        <p>Мы создаем новую линию компьютерных компонентов с полным контролем качества. Наша цель — производить высоконадежные и производительные решения.</p>
+                        
+                        <div class="principles-grid">
+                            <div class="principle-card">
+                                <i class="fas fa-cogs"></i>
+                                <h4>Полный цикл</h4>
+                                <p>Собственные технологии и строгое тестирование на каждом этапе производства.</p>
+                            </div>
+                            <div class="principle-card">
+                                <i class="fas fa-award"></i>
+                                <h4>Качество</h4>
+                                <p>Отборные материалы и гарантия стабильной работы всех компонентов.</p>
+                            </div>
+                            <div class="principle-card">
+                                <i class="fas fa-palette"></i>
+                                <h4>Дизайн</h4>
+                                <p>Современный и функциональный дизайн, который радует глаз.</p>
+                            </div>
+                            <div class="principle-card">
+                                <i class="fas fa-tag"></i>
+                                <h4>Цена</h4>
+                                <p>Оптимальная стоимость без посредников и накруток.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="avito-link">
+                    <a href="https://www.avito.ru/brands/8fff3fb51411fe8548318140d73cfb1b" target="_blank">
+                        <i class="fas fa-store"></i> Магазин на Авито
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Страница "Контакты" -->
+    <section id="contacts" class="page-section contacts">
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="contacts-content">
+                    <h2>Контакты</h2>
+                    
+                    <div class="welcome-text">
+                        Вы на верном пути, если хотите со мной связаться! 
+                        Эта страница создана специально для того, чтобы наше общение 
+                        было <span class="highlight">простым и удобным</span>.
+                    </div>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-card">
+                            <i class="fab fa-telegram"></i>
+                            <h3>Telegram</h3>
+                            <a href="https://t.me/markplombirr" target="_blank" class="contact-info">
+                                @markplombir
+                            </a>
+                            <p class="contact-description">
+                                Самый быстрый способ связи. Отвечаю оперативно!
+                            </p>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Электронная почта</h3>
+                            <a href="mailto:mtoch299@gmail.com" class="contact-info">
+                                mtoch299@gmail.com
+                            </a>
+                            <p class="contact-description">
+                                Для официальных запросов и сотрудничества
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="content-wrapper">
+                <div class="social-links">
+                    <a href="https://t.me/markplombirr" target="_blank"><i class="fab fa-telegram"></i></a>
+                    <a href="https://www.avito.ru/brands/8fff3fb51411fe8548318140d73cfb1b" target="_blank"><i class="fas fa-store"></i></a>
+                    <a href="https://vk.com/petr149948u" target="_blank"><i class="fab fa-vk"></i></a>
+                    <a href="mailto:mtoch299@gmail.com"><i class="fab fa-youtube"></i></a>
+                </div>
+                <div class="copyright">
+                    &copy; 2026 GearTech. Все права защищены. Это проект будущего.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Управление бургер-меню и боковой панелью
+        const burgerMenu = document.getElementById('burgerMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const sidebar = document.getElementById('sidebar');
+        
+        function toggleSidebar() {
+            burgerMenu.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+            sidebar.classList.toggle('active');
+        }
+        
+        burgerMenu.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+        
+        // Управление переключением вкладок авторизации
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Обновляем активные вкладки
+                authTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Показываем соответствующую форму
+                authForms.forEach(form => {
+                    form.classList.remove('active');
+                    if (form.id === `${tabId}Form`) {
+                        form.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Переключение между формами по ссылкам
+        document.querySelector('.switch-to-register')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.auth-tab[data-tab="register"]').click();
+        });
+        
+        document.querySelector('.switch-to-login')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.auth-tab[data-tab="login"]').click();
+        });
+        
+        // Обработка форм авторизации/регистрации
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginSuccess = document.getElementById('loginSuccess');
+        const registerSuccess = document.getElementById('registerSuccess');
+        
+        function showSuccessMessage(formType) {
+            if (formType === 'login') {
+                loginSuccess.style.display = 'block';
+                registerSuccess.style.display = 'none';
+                
+                // Автоматическое скрытие через 3 секунды
+                setTimeout(() => {
+                    loginSuccess.style.display = 'none';
+                }, 3000);
+            } else {
+                registerSuccess.style.display = 'block';
+                loginSuccess.style.display = 'none';
+                
+                // Автоматическое скрытие через 3 секунды
+                setTimeout(() => {
+                    registerSuccess.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        function handleAuthSubmit(e, formType) {
+            e.preventDefault();
+            
+            // Простая валидация для регистрации
+            if (formType === 'register') {
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    alert('Пароли не совпадают!');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    alert('Пароль должен содержать минимум 6 символов!');
+                    return;
+                }
+            }
+            
+            // Показываем сообщение об успехе
+            showSuccessMessage(formType);
+            
+            // Перенаправление на главную страницу через 1.5 секунды
+            setTimeout(() => {
+                switchPage('home');
+                if (sidebar.classList.contains('active')) {
+                    toggleSidebar();
+                }
+            }, 1500);
+        }
+        
+        loginForm.addEventListener('submit', (e) => handleAuthSubmit(e, 'login'));
+        registerForm.addEventListener('submit', (e) => handleAuthSubmit(e, 'register'));
+        
+        // Забыли пароль (просто алерт)
+        document.querySelector('.forgot-password')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Функция восстановления пароля временно недоступна. Свяжитесь с поддержкой через Telegram: @markplombir');
+        });
+        
+        // Открытие страницы личного кабинета
+        document.getElementById('sidebarAccount').addEventListener('click', function(e) {
+            e.preventDefault();
+            switchPage('auth');
+            toggleSidebar();
+        });
+        
+        // Mobile Menu Toggle (оригинальный)
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+
+        // Page Navigation
+        const navLinks = document.querySelectorAll('.nav-link[data-target]');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link[data-target]');
+        const pageSections = document.querySelectorAll('.page-section');
+        const logoHome = document.getElementById('logoHome');
+        
+        function switchPage(targetId) {
+            // Update active page
+            pageSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === targetId) {
+                    section.classList.add('active');
+                }
+            });
+            
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-target') === targetId) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Close mobile menu if open
+            document.querySelector('.nav-links').classList.remove('active');
+            document.querySelector('.menu-toggle i').classList.remove('fa-times');
+            document.querySelector('.menu-toggle i').classList.add('fa-bars');
+            
+            // Close sidebar if open
+            if (sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Add click events to navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('data-target')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    switchPage(targetId);
+                }
+            });
+        });
+        
+        // Add click events to sidebar links
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('data-target')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    switchPage(targetId);
+                }
+            });
+        });
+        
+        // Add click event to logo
+        logoHome.addEventListener('click', function(e) {
+            e.preventDefault();
+            switchPage('home');
+        });
+
+        // Create animated background elements
+        const bgElements = document.getElementById('bgElements');
+        const elementTypes = ['gpu', 'cpu', 'ram', 'motherboard', 'ssd', 'cooler', 'circuit', 'chip', 'fan', 'power-supply', 'graphics-card', 'keyboard', 'mouse'];
+        
+        // Улучшенная анимация с плавным движением по всему фону
+        class FloatingElement {
+            constructor() {
+                this.element = document.createElement('div');
+                this.type = elementTypes[Math.floor(Math.random() * elementTypes.length)];
+                this.element.className = `element ${this.type}`;
+                
+                // Случайная стартовая позиция по всему экрану
+                this.startX = Math.random() * (window.innerWidth + 400) - 200;
+                this.startY = Math.random() * (window.innerHeight + 400) - 200;
+                
+                // Случайные свойства для очень плавного движения
+                this.size = 0.15 + Math.random() * 0.4;
+                this.speed = 0.05 + Math.random() * 0.15; // Очень медленная скорость
+                this.amplitudeX = 150 + Math.random() * 250;
+                this.amplitudeY = 100 + Math.random() * 200;
+                this.rotationSpeed = (Math.random() * 0.008 + 0.002) * (Math.random() > 0.5 ? 1 : -1);
+                this.rotation = Math.random() * 360;
+                this.startTime = Date.now() + Math.random() * 3000;
+                this.phaseX = Math.random() * Math.PI * 2;
+                this.phaseY = Math.random() * Math.PI * 2;
+                
+                // Направления движения
+                this.directionX = Math.random() > 0.5 ? 1 : -1;
+                this.directionY = Math.random() > 0.5 ? 1 : -1;
+                this.driftSpeedX = 0.2 + Math.random() * 0.4;
+                this.driftSpeedY = 0.1 + Math.random() * 0.3;
+                
+                // Применяем начальные стили
+                this.updatePosition(0);
+                this.element.style.opacity = `${0.1 + Math.random() * 0.2}`;
+                this.element.style.transition = 'transform 4s ease-in-out, left 4s ease-in-out, top 4s ease-in-out, opacity 4s ease-in-out';
+                
+                bgElements.appendChild(this.element);
+            }
+            
+            updatePosition(timeDelta) {
+                const time = Date.now();
+                if (time < this.startTime) return;
+                
+                const elapsed = (time - this.startTime) * 0.001;
+                
+                // Плавное движение по синусоидам с дрейфом
+                const waveX = Math.sin(elapsed * this.speed + this.phaseX) * this.amplitudeX * this.directionX;
+                const waveY = Math.cos(elapsed * this.speed * 0.8 + this.phaseY) * this.amplitudeY * this.directionY;
+                
+                // Медленный дрейф
+                const driftX = Math.sin(elapsed * 0.3) * this.driftSpeedX * 100;
+                const driftY = Math.cos(elapsed * 0.2) * this.driftSpeedY * 80;
+                
+                const targetX = this.startX + waveX + driftX;
+                const targetY = this.startY + waveY + driftY;
+                
+                // Плавное вращение
+                this.rotation += this.rotationSpeed * timeDelta;
+                
+                // Применяем трансформации
+                this.element.style.left = `${targetX}px`;
+                this.element.style.top = `${targetY}px`;
+                this.element.style.transform = `scale(${this.size}) rotate(${this.rotation}deg)`;
+                
+                // Плавное изменение прозрачности
+                const opacity = 0.1 + 0.15 * Math.sin(elapsed * 0.2);
+                this.element.style.opacity = `${opacity}`;
+                
+                // Если элемент выходит за пределы экрана, плавно возвращаем его
+                if (targetX < -500 || targetX > window.innerWidth + 500 || 
+                    targetY < -500 || targetY > window.innerHeight + 500) {
+                    this.reset();
+                }
+            }
+            
+            reset() {
+                // Плавное возвращение в новую позицию
+                this.startX = Math.random() * (window.innerWidth + 400) - 200;
+                this.startY = Math.random() * (window.innerHeight + 400) - 200;
+                this.startTime = Date.now();
+                this.phaseX = Math.random() * Math.PI * 2;
+                this.phaseY = Math.random() * Math.PI * 2;
+                this.directionX = Math.random() > 0.5 ? 1 : -1;
+                this.directionY = Math.random() > 0.5 ? 1 : -1;
+                
+                // Плавный переход к новой позиции
+                this.element.style.transition = 'transform 4s ease-in-out, left 4s ease-in-out, top 4s ease-in-out, opacity 4s ease-in-out';
+            }
+        }
+
+        // Создание и управление плавающими элементами
+        let floatingElements = [];
+        let lastTime = 0;
+        
+        function createFloatingElements() {
+            bgElements.innerHTML = '';
+            floatingElements = [];
+            
+            // Больше элементов для заполнения всего фона
+            const elementCount = window.innerWidth < 768 ? 25 : 40;
+            
+            for (let i = 0; i < elementCount; i++) {
+                floatingElements.push(new FloatingElement());
+            }
+        }
+        
+        // Цикл анимации
+        function animateFloatingElements(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const timeDelta = timestamp - lastTime;
+            lastTime = timestamp;
+            
+            floatingElements.forEach(element => {
+                element.updatePosition(timeDelta * 0.016);
+            });
+            
+            requestAnimationFrame(animateFloatingElements);
+        }
+        
+        // Инициализация
+        createFloatingElements();
+        requestAnimationFrame(animateFloatingElements);
+        
+        // Обработка изменения размера окна
+        window.addEventListener('resize', function() {
+            createFloatingElements();
+        });
+        
+        // Закрытие мобильного меню при клике снаружи
+        document.addEventListener('click', function(e) {
+            const nav = document.querySelector('.nav-links');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (nav.classList.contains('active') && 
+                !nav.contains(e.target) && 
+                !menuToggle.contains(e.target)) {
+                nav.classList.remove('active');
+                menuToggle.querySelector('i').classList.remove('fa-times');
+                menuToggle.querySelector('i').classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>
